@@ -11,6 +11,7 @@ import {
   Clock,
   CheckCircle,
   LogOut,
+  ClipboardList,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
@@ -18,6 +19,8 @@ import { useNavigate } from "react-router-dom";
 import { auth, db } from "../database/FirebaseConfig";
 import { collection, query, where, getDocs, orderBy, doc, updateDoc } from "firebase/firestore";
 import { useToast } from "@/hooks/use-toast";
+import { useAppDispatch } from "@/store/hooks";
+import { logout } from "@/store/slices/userSlice";
 
 interface Report {
   id: string;
@@ -34,6 +37,7 @@ interface Report {
 
 const NGODashboard = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { toast } = useToast();
   const [newReports, setNewReports] = useState<Report[]>([]);
   const [inProgressReports, setInProgressReports] = useState<Report[]>([]);
@@ -201,9 +205,21 @@ const NGODashboard = () => {
   const handleLogout = async () => {
     try {
       await auth.signOut();
-      navigate("/");
+      dispatch(logout());
+      toast({
+        title: "Logged Out Successfully",
+        description: "You have been logged out. Redirecting...",
+      });
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
     } catch (error) {
       console.error("Error signing out:", error);
+      toast({
+        title: "Error",
+        description: "Failed to log out. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
