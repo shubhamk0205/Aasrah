@@ -40,7 +40,7 @@ const Login = () => {
       
       dispatch(loginSuccess({
         email,
-        role: role === 'ngo' ? 'user' : role // Convert 'ngo' to 'user' for Redux store compatibility
+        role
       }));
       
       toast({
@@ -55,9 +55,8 @@ const Login = () => {
         ngo: '/ngo-dashboard'
       };
       
-      setTimeout(() => {
-        navigate(dashboardPaths[role]);
-      }, 1000);
+      navigate(dashboardPaths[role]);
+      
     } catch (error) {
       dispatch(loginFailure(error instanceof Error ? error.message : "An error occurred"));
       toast({

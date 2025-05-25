@@ -34,7 +34,7 @@ const Register = () => {
     });
     
     setTimeout(() => {
-      navigate("/dashboard");
+      navigate("/ngo-dashboard");
     }, 2000);
   };
 
